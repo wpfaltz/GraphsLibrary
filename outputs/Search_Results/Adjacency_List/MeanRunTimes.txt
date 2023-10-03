@@ -1,0 +1,18 @@
+.Grafo 1:
+   - BFS: 13.92 milisegundos
+   - DFS: 26.2 milisegundos
+.Grafo 2:
+   - BFS: 145.01 milisegundos
+   - DFS: 208.06 milisegundos
+.Grafo 3:
+   - BFS: 168.3 milisegundos
+   - DFS: 211.78 milisegundos
+.Grafo 4:
+   - BFS: 1389.73 milisegundos
+   - DFS: 2317.95 milisegundos
+.Grafo 5:
+   - BFS: 2773.88 milisegundos
+   - DFS: 3642.89 milisegundos
+.Grafo 6:
+   - BFS: 11763.9 milisegundos
+   - DFS: 15122 milisegundos
