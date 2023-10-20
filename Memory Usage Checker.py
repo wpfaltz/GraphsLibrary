@@ -38,7 +38,9 @@ print(f". Memória total: {converted[0]:.5f} GB")
 print(f"\t- Memória Usada: {converted[1]:.5f} GB")
 print(f"\t- Memória Livre: {converted[2]:.5f} GB")
 
-all_files = os.listdir()
+pasta_grafos = r"G:\Outros computadores\Meu laptop\UFRJ\2023.2\Teoria dos Grafos\TP1\graphs"
+all_files = os.listdir(pasta_grafos)
+print(all_files)
 all_files.sort()
 only_graphs = []
 
@@ -51,7 +53,8 @@ print("Obs: Todas as estimativas para o tamanho ocupado pelos grafos em cada uma
 print("Informações sobre os grafos:")
 
 for i in range(len(only_graphs)):
-    with open(only_graphs[i], "r") as fp:
+    path_to_graph = os.path.join(pasta_grafos, only_graphs[i])
+    with open(path_to_graph, "r") as fp:
         print(f'. Grafo {i+1}:')
         n = int(fp.readline())
         m = len(fp.readlines())
