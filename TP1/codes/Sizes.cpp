@@ -1,4 +1,4 @@
-#include "../library/GraphLibrary.h"
+#include "../../library/GraphLibrary.h"
 #include <random>
 #include <chrono>
 #include <thread>
