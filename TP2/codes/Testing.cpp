@@ -6,7 +6,7 @@
 #include <bits/stdc++.h> 
 using namespace std;
 
-int graphs[1] = {4};
+int graphs[1] = {5};
 
 int main() {
     for (int i = 0; i < sizeof(graphs) / sizeof(graphs[0]); i++) {

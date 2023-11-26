@@ -154,8 +154,6 @@ void WeightedGraph::DijkstraWithVector(int startVertex) {
     //     }
     // }
 
-
-
     while (!unexploredVertices.empty()) { // Vai executar n vezes
         int u = *unexploredVertices.begin(); // O(1)
         unexploredVertices.erase(unexploredVertices.begin()); //O(1)
