@@ -42,7 +42,7 @@ private:
     std::vector<int> predecessors; // vetor de predecessores
     std::string output_file_path_ford_fulkerson_bfs;
 
-    std::list<int> findAugmentingPathBFS(std::vector<std::map<int, int>>& residualGraph, int source, int sink);
+    std::list<int> findPathBFS(std::vector<std::map<int, int>>& residualGraph, int source, int sink);
     void constructInitialResidualGraph(const std::vector<std::map<int, Edge>>& edgeMaps);
     std::pair<std::pair<int, int>, int> findBottleneck(const std::list<int>& path, const std::vector<std::map<int, int>>& residualGraph);
     void updateResidualGraph(std::vector<std::map<int, int>>& residualGraph, const std::list<int>& path, int bottleneckFlow, std::pair<int, int> bottleneckEdge);
@@ -69,6 +69,7 @@ void WeightedGraph::removeEdge(int vertexA, int vertexB) {
     auto itA = edgeMaps[vertexA - 1].find(vertexB);
     if (itA != edgeMaps[vertexA - 1].end()) {
         edgeMaps[vertexA - 1].erase(itA);
+        numEdges--;
     }
 
     // Se o grafo não for direcionado, remover a aresta reversa também
@@ -76,6 +77,7 @@ void WeightedGraph::removeEdge(int vertexA, int vertexB) {
         auto itB = edgeMaps[vertexB - 1].find(vertexA);
         if (itB != edgeMaps[vertexB - 1].end()) {
             edgeMaps[vertexB - 1].erase(itB);
+            numEdges--;
         }
     }
 }
@@ -127,27 +129,6 @@ void WeightedGraph::Output_Ford_Fulkerson_BFS(const std::string filename){
     output_file_path_ford_fulkerson_bfs = filename;
 }
 
-void WeightedGraph::constructInitialResidualGraph(const std::vector<std::map<int, Edge>>& edgeMaps) {
-    // Certificando que o residualGraph está vazio antes de começar
-    residualGraph.clear();
-
-    residualGraph.resize(edgeMaps.size());
-
-    // Para cada vértice, construa o mapa de destinos associados a arestas no residualGraph
-    for (size_t i = 0; i < edgeMaps.size(); ++i) {
-        // Mapa correspondente a esta posição no residualGraph
-        std::map<int, int>& residualEdges = residualGraph[i];
-
-        for (const auto& entry : edgeMaps[i]) {
-            int destination = entry.first;
-            const Edge& edge = entry.second;
-
-            // Adicionar a aresta no residualGraph
-            residualEdges[destination] = edge.capacity;
-        }
-    }
-}
-
 std::pair<int, std::vector<std::map<int, WeightedGraph::Edge>>> WeightedGraph::Ford_Fulkerson_BFS(int source, int sink, bool saveToDisk) {
 
     // Inicializar o grafo residual
@@ -159,7 +140,7 @@ std::pair<int, std::vector<std::map<int, WeightedGraph::Edge>>> WeightedGraph::F
     // Continuar até não haver mais caminhos aumentantes
     while (true) {
         // Encontrar um caminho aumentante usando BFS
-        std::list<int> path = findAugmentingPathBFS(residualGraph, source, sink);
+        std::list<int> path = findPathBFS(residualGraph, source, sink);
 
         // Se não houver mais caminhos aumentantes, sair do loop
         if (path.empty()) {
@@ -192,7 +173,28 @@ std::pair<int, std::vector<std::map<int, WeightedGraph::Edge>>> WeightedGraph::F
     return {maxFlow, edgeMaps};
 }
 
-std::list<int> WeightedGraph::findAugmentingPathBFS(std::vector<std::map<int, int>>& residualGraph, int source, int sink) {
+void WeightedGraph::constructInitialResidualGraph(const std::vector<std::map<int, Edge>>& edgeMaps) {
+    // Certificando que o residualGraph está vazio antes de começar
+    residualGraph.clear();
+
+    residualGraph.resize(edgeMaps.size());
+
+    // Para cada vértice, construa o mapa de destinos associados a arestas no residualGraph
+    for (size_t i = 0; i < edgeMaps.size(); ++i) {
+        // Mapa correspondente a esta posição no residualGraph
+        std::map<int, int>& residualEdges = residualGraph[i];
+
+        for (const auto& entry : edgeMaps[i]) {
+            int destination = entry.first;
+            const Edge& edge = entry.second;
+
+            // Adicionar a aresta no residualGraph
+            residualEdges[destination] = edge.capacity;
+        }
+    }
+}
+
+std::list<int> WeightedGraph::findPathBFS(std::vector<std::map<int, int>>& residualGraph, int source, int sink) {
     std::queue<int> queue;
     std::vector<int> parent(numVertices, -1);
     std::vector<bool> visited(numVertices, false);
